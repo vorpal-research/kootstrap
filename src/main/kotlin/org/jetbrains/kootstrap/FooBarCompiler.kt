@@ -37,6 +37,14 @@ import java.io.File
 
 object FooBarCompiler {
 
+    init {
+        Extensions.getRootArea().registerExtensionPoint(
+                TreeCopyHandler.EP_NAME.name,
+                TreeCopyHandler::class.java.canonicalName,
+                ExtensionPoint.Kind.INTERFACE
+        )
+    }
+
     fun analyzeBunchOfSources(
             env: KotlinCoreEnvironment,
             files: Collection<KtFile>,
@@ -89,12 +97,6 @@ object FooBarCompiler {
                 EnvironmentConfigFiles.JVM_CONFIG_FILES
         )
 
-        Extensions.getRootArea().registerExtensionPoint(
-                TreeCopyHandler.EP_NAME.name,
-                TreeCopyHandler::class.java.canonicalName,
-                ExtensionPoint.Kind.INTERFACE
-        )
-
         class MyPomModelImpl(env: KotlinCoreEnvironment) : PomModelImpl(env.project) {
             override fun runTransaction(pt: PomTransaction) = pt.run()
         }
@@ -119,5 +121,8 @@ object FooBarCompiler {
 
         return env
     }
+
+    fun tearDownMyEnv(env: KotlinCoreEnvironment) =
+            KotlinCoreEnvironment.disposeApplicationEnvironment()
 
 }
