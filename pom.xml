@@ -6,11 +6,11 @@
 
     <groupId>org.jetbrains</groupId>
     <artifactId>kootstrap</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.0.0.1</version>
 
     <properties>
         <java.version>1.8</java.version>
-        <kotlin.version>1.0.4</kotlin.version>
+        <kotlin.version>1.1.3</kotlin.version>
         <aether.version>1.1.0</aether.version>
         <wagon.version>2.10</wagon.version>
 
@@ -19,8 +19,9 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>bintray-vorpal-research-kotlin-maven</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/vorpal-research/kotlin-maven</url>
         </repository>
     </repositories>
 
@@ -47,9 +48,14 @@
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.belyaev-mikhail.kotlin4jitpack</groupId>
-            <artifactId>kotlin-compiler-before-shrink</artifactId>
-            <version>8eb9a75253</version>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-runtime</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-nostrip</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
 
         <dependency>
@@ -139,6 +145,32 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
@@ -170,5 +202,14 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-vorpal-research-kotlin-maven</id>
+            <name>vorpal-research-kotlin-maven</name>
+            <url>https://api.bintray.com/maven/vorpal-research/kotlin-maven/${artifactId}/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
 </project>

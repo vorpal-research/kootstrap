@@ -10,6 +10,7 @@ import com.intellij.openapi.util.Computable
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.codeStyle.ChangedRangesInfo
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.codeStyle.Indent
 import com.intellij.util.IncorrectOperationException
@@ -18,7 +19,7 @@ import kotlinx.Warnings
 import org.jetbrains.kootstrap.util.function
 
 class MockCodeStyleManager(private val myProject: Project) : CodeStyleManager() {
-
+    override fun reformatTextWithContext(p0: PsiFile, p1: ChangedRangesInfo) = Unit
     override fun getProject(): Project = myProject
 
     @Throws(IncorrectOperationException::class)
