@@ -10,6 +10,7 @@ import com.intellij.pom.tree.TreeAspect
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.impl.source.codeStyle.IndentHelper
 import com.intellij.psi.impl.source.tree.TreeCopyHandler
+import com.intellij.psi.search.GlobalSearchScope
 import org.apache.commons.cli.CommandLine
 import org.jetbrains.kootstrap.idea.MockCodeStyleManager
 import org.jetbrains.kootstrap.idea.MockIndentHelper
@@ -51,14 +52,11 @@ object FooBarCompiler {
             cfg: CompilerConfiguration
     ): BindingContext? {
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-                TopDownAnalyzerFacadeForJVM.createContextWithSealedModule(
-                        env.project,
-                        cfg
-                ),
+                env.project,
                 files,
                 CliLightClassGenerationSupport.CliBindingTrace(),
                 cfg,
-                JvmPackagePartProvider(env)
+                { scope -> JvmPackagePartProvider(env, scope) }
         ).bindingContext
     }
 
@@ -67,7 +65,7 @@ object FooBarCompiler {
 
         val cfg = CompilerConfiguration()
 
-        val jdkRoots = PathUtil.getJdkClassesRoots()
+        val jdkRoots = PathUtil.getJdkClassesRootsFromCurrentJre()
         val kotlinRoots = PathUtilEx.getKotlinPathsForCompiler()
 
         // TODO: Do not add the same jar file twice
