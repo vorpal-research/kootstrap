@@ -1,5 +1,6 @@
 package org.jetbrains.kootstrap
 
+import com.intellij.mock.MockProject
 import com.intellij.openapi.extensions.ExtensionPoint
 import com.intellij.openapi.extensions.Extensions
 import com.intellij.openapi.util.Disposer
@@ -17,18 +18,15 @@ import org.jetbrains.kootstrap.idea.MockIndentHelper
 import org.jetbrains.kootstrap.util.*
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.JvmPackagePartProvider
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.*
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.addKotlinSourceRoots
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.load.java.JvmAbi
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.jvm.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 
@@ -56,7 +54,7 @@ object FooBarCompiler {
                 files,
                 CliLightClassGenerationSupport.CliBindingTrace(),
                 cfg,
-                { scope -> JvmPackagePartProvider(env, scope) }
+                { scope -> JvmPackagePartProvider(env.configuration.languageVersionSettings, scope) }
         ).bindingContext
     }
 
@@ -89,8 +87,9 @@ object FooBarCompiler {
 
     fun setupMyEnv(cfg: CompilerConfiguration): KotlinCoreEnvironment {
 
+        val disposable = Disposer.newDisposable()
         val env = KotlinCoreEnvironment.createForProduction(
-                Disposer.newDisposable(),
+                disposable,
                 cfg,
                 EnvironmentConfigFiles.JVM_CONFIG_FILES
         )
@@ -102,17 +101,18 @@ object FooBarCompiler {
         val pomModel = MyPomModelImpl(env)
         TreeAspect(pomModel)
 
-        env.application.registerService(
+        val project = env.project as MockProject
+        project.registerService(
                 PomModel::class.java,
                 pomModel
         )
 
-        env.application.registerService(
+        project.registerService(
                 CodeStyleManager::class.java,
                 MockCodeStyleManager(env.project)
         )
 
-        env.application.registerService(
+        project.registerService(
                 IndentHelper::class.java,
                 MockIndentHelper()
         )
@@ -120,7 +120,6 @@ object FooBarCompiler {
         return env
     }
 
-    fun tearDownMyEnv(env: KotlinCoreEnvironment) =
-            KotlinCoreEnvironment.disposeApplicationEnvironment()
+    fun tearDownMyEnv(env: KotlinCoreEnvironment) = Disposer.dispose(env.project)
 
 }
