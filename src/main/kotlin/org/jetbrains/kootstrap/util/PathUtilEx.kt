@@ -15,7 +15,7 @@ object PathUtilEx {
     private val KOMPILER_RE = Regex("kotlin-compiler-(.*)\\.jar")
 
     fun getCompilerPathForCompilerJar(): Pair<File, String> {
-        val jar = PathUtil.getPathUtilJar()
+        val jar = PathUtil.pathUtilJar
 
         if (!jar.exists()) return NO_SHIT
 
