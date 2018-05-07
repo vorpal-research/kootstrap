@@ -6,13 +6,20 @@
 
     <groupId>org.jetbrains</groupId>
     <artifactId>kootstrap</artifactId>
-    <version>0.0.1.1</version>
+    <version>0.0.1.2-41</version>
 
     <properties>
         <java.version>1.8</java.version>
-        <kotlin.version>1.2.0</kotlin.version>
+        <kotlin.version>1.2.41</kotlin.version>
         <aether.version>1.1.0</aether.version>
-        <wagon.version>2.10</wagon.version>
+        <wagon.version>3.0.0</wagon.version>
+
+        <junit.version>4.12</junit.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <commons-cli.version>1.4</commons-cli.version>
+        <maven-model-builder.version>3.5.3</maven-model-builder.version>
+        <maven-aether-provider.version>3.3.9</maven-aether-provider.version>
+        <jpplib.version>0.7.4</jpplib.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -61,14 +68,14 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model-builder</artifactId>
-            <version>3.3.9</version>
+            <version>${maven-model-builder.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.aether</groupId>
@@ -108,7 +115,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-aether-provider</artifactId>
-            <version>3.3.3</version>
+            <version>${maven-aether-provider.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.wagon</groupId>
@@ -119,18 +126,18 @@
         <dependency>
             <groupId>com.io7m.jpplib</groupId>
             <artifactId>io7m-jpplib-core</artifactId>
-            <version>0.7.1</version>
+            <version>${jpplib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.3.1</version>
+            <version>${commons-cli.version}</version>
         </dependency>
     </dependencies>
 
@@ -208,7 +215,9 @@
         <repository>
             <id>bintray-vorpal-research-kotlin-maven</id>
             <name>vorpal-research-kotlin-maven</name>
-            <url>https://api.bintray.com/maven/vorpal-research/kotlin-maven/${artifactId}/;publish=1</url>
+            <url>
+                https://api.bintray.com/maven/vorpal-research/kotlin-maven/${artifactId}/;publish=1
+            </url>
         </repository>
     </distributionManagement>
 

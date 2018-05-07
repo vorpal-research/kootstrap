@@ -52,7 +52,7 @@ object FooBarCompiler {
         return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
                 env.project,
                 files,
-                CliLightClassGenerationSupport.CliBindingTrace(),
+                CliBindingTrace(),
                 cfg,
                 { scope -> JvmPackagePartProvider(env.configuration.languageVersionSettings, scope) }
         ).bindingContext
