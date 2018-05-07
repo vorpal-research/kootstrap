@@ -4,6 +4,8 @@ import org.apache.maven.model.Dependency
 import org.apache.maven.model.Model
 import org.apache.maven.model.building.DefaultModelBuilderFactory
 import org.apache.maven.model.building.DefaultModelBuildingRequest
+import org.apache.maven.model.building.ModelProblemCollector
+import org.apache.maven.model.building.ModelProblemCollectorRequest
 import org.apache.maven.model.interpolation.StringSearchModelInterpolator
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils
 import org.eclipse.aether.RepositorySystem
@@ -67,7 +69,11 @@ fun getPomModel(pom: File): Model {
             b.build(pomReq).rawModel,
             pom.parentFile,
             pomReq,
-            null
+            object : ModelProblemCollector {
+                override fun add(req: ModelProblemCollectorRequest?) {
+                    // do nothing
+                }
+            }
     )
     return model
 }
