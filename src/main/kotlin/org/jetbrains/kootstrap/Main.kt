@@ -43,16 +43,13 @@ fun doit(args: Array<String>) {
         }
     }
 
-    val file = targetFiles.first()
-
-    file.firstChild.replace(KtPsiFactory(env.project).createExpression("a + 3"))
     val ctx = FooBarCompiler.analyzeBunchOfSources(env, ktFiles, cfg)
             ?: BindingContext.EMPTY
 
 }
 
 fun main(args: Array<String>) {
-    val projectDir = "/home/stepanov/Kotlin/testProjects/CompilerCrushingTests/test"
+    val projectDir = ""
     val new_args = arrayOf("-t", projectDir)
     doit(new_args)
 }
